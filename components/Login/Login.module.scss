@@ -1,0 +1,53 @@
+@import '../../styles/variables';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+}
+
+.label {
+  font-size: 1.2rem;
+  color: $main-text;
+  margin-left: 10px;
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 10px 10px;
+  font-size: 1.2rem;
+  color: $main-text;
+  outline: none;
+  transition: 0.05s;
+
+  &:focus {
+    border-color: $main;
+  }
+}
+
+.button {
+  width: 100%;
+  height: 50px;
+  background-color: $secondary;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.question {
+  align-self: center;
+  margin-top: 5px;
+  color: $bg-panel;
+  font-size: 0.9rem;
+
+  a {
+    color: $secondary;
+  }
+}
