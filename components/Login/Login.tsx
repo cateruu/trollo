@@ -12,7 +12,7 @@ const Login = () => {
         Password
       </label>
       <input type='Password' className={classes.input} id='password' />
-      <button className={classes.button}>Login</button>
+      <button className={classes.button}>Sign in</button>
       <p className={classes.question}>
         Don`t have an account? <Link href='/singnup'>Sign up</Link>
       </p>

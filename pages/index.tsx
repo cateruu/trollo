@@ -1,5 +1,7 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+
+import { withPageAuth } from '@supabase/auth-helpers-nextjs';
 
 const Home: NextPage = () => {
   return (
@@ -12,5 +14,12 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withPageAuth({
+  redirectTo: '/login',
+  async getServerSideProps(context) {
+    return { props: {} };
+  },
+});
 
 export default Home;
