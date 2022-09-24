@@ -1,13 +1,14 @@
-import Login from '../components/Login/Login';
 import classes from '../styles/LoginPage.module.scss';
 
-const login = () => {
+import Signup from '../components/Login/Singup';
+
+const SignupPage = () => {
   return (
     <main className={classes.main}>
       <h1 className={classes.header}>Trollo</h1>
-      <Login />
+      <Signup />
     </main>
   );
 };
 
-export default login;
+export default SignupPage;
