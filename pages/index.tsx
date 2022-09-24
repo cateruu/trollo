@@ -5,10 +5,18 @@ import classes from '../styles/Home.module.scss';
 
 import { withPageAuth } from '@supabase/auth-helpers-nextjs';
 import HeaderDashboard from '../components/UI/Headers/HeaderDashboard/HeaderDashboard';
-import { useUser } from '@supabase/auth-helpers-react';
+
+import { IoIosAddCircle } from 'react-icons/io';
+import { IconContext } from 'react-icons/lib';
+
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import AddWorkspace from '../components/Modals/AddWorkspace/AddWorkspace';
+import { openAddWorkspace } from '../features/addWorkplace/addWorkplaceSlice';
 
 const Home: NextPage = () => {
-  const user = useUser();
+  const { isOpen } = useAppSelector((state) => state.addWorkspace);
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <Head>
@@ -18,6 +26,15 @@ const Home: NextPage = () => {
       </Head>
       <main className={classes.main}>
         <HeaderDashboard />
+        {/* <section className={classes.container}>
+          <div className={classes.section}>
+            <h3 className={classes.name}>My Workspaces</h3>
+            <IconContext.Provider value={{ className: classes.add }}>
+              <IoIosAddCircle />
+            </IconContext.Provider>
+          </div>
+        </section>
+        {isOpen && <AddWorkspace />} */}
       </main>
     </>
   );
