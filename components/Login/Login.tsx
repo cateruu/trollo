@@ -1,7 +1,7 @@
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { Router, useRouter } from 'next/router';
+import { FormEvent, useEffect, useState } from 'react';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -27,6 +27,7 @@ const Login = () => {
         password: data.password,
       },
       {
+        redirectTo: '/',
         shouldCreateUser: false,
       }
     );
