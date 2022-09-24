@@ -1,0 +1,24 @@
+@import '../../../../styles/variables';
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-family: 'Licorice';
+  color: #6336e5;
+  font-size: 4rem;
+}
+
+.logout {
+  width: 80px;
+  background-color: $secondary;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  align-self: center;
+  cursor: pointer;
+  color: #fff;
+  margin-top: -10px;
+}

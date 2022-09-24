@@ -1,7 +1,7 @@
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { supabase } from '../../config/supabase';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -23,7 +23,7 @@ const Signup = () => {
 
     if (data.password !== data.confirmPassword) return;
 
-    const { user, error } = await supabase.auth.signUp({
+    const { user, error } = await supabaseClient.auth.signUp({
       email: data.email,
       password: data.password,
     });
@@ -44,6 +44,7 @@ const Signup = () => {
         type='Email'
         className={classes.input}
         id='email'
+        value={data.email}
         onChange={(e) => handleChange(e.target.value, 'email')}
       />
       <label className={classes.label} htmlFor='password'>
@@ -53,6 +54,7 @@ const Signup = () => {
         type='Password'
         className={classes.input}
         id='password'
+        value={data.password}
         onChange={(e) => handleChange(e.target.value, 'password')}
       />
       <label className={classes.label} htmlFor='confirmPassword'>
@@ -62,6 +64,7 @@ const Signup = () => {
         type='Password'
         className={classes.input}
         id='confirmPassword'
+        value={data.confirmPassword}
         onChange={(e) => handleChange(e.target.value, 'confirmPassword')}
       />
       <button className={classes.button}>Sign up</button>

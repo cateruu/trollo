@@ -1,7 +1,7 @@
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
-import { supabase } from '../../config/supabase';
+import { Router, useRouter } from 'next/router';
+import { FormEvent, useEffect, useState } from 'react';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -14,25 +14,28 @@ const Login = () => {
     email: '',
     password: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
-    setLoading(true);
+    setIsLoading(true);
     e.preventDefault();
 
-    const { user, error, session } = await supabase.auth.signIn(
+    const { session } = await supabaseClient.auth.signIn(
       {
         email: data.email,
         password: data.password,
       },
       {
+        redirectTo: '/',
         shouldCreateUser: false,
       }
     );
-    setLoading(false);
+    setIsLoading(false);
 
-    if (session) router.push('/');
+    if (session) {
+      router.push('/');
+    }
   };
 
   const handleChange = (data: string, object: string) => {
@@ -48,6 +51,7 @@ const Login = () => {
         type='Email'
         className={classes.input}
         id='email'
+        value={data.email}
         onChange={(e) => handleChange(e.target.value, 'email')}
       />
       <label className={classes.label} htmlFor='password'>
@@ -57,13 +61,14 @@ const Login = () => {
         type='Password'
         className={classes.input}
         id='password'
+        value={data.password}
         onChange={(e) => handleChange(e.target.value, 'password')}
       />
       <button className={classes.button}>Sign in</button>
       <p className={classes.question}>
         Don`t have an account? <Link href='/signup'>Sign up</Link>
       </p>
-      {loading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
     </form>
   );
 };
