@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { useAuth } from '../../store/AuthContext';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -15,10 +16,14 @@ const Login = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const auth = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
     setIsLoading(true);
     e.preventDefault();
+
+    await auth?.signIn(data.email, data.password);
+    router.push('/');
 
     setIsLoading(false);
   };

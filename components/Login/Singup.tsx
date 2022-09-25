@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { useAuth } from '../../store/AuthContext';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -16,11 +17,15 @@ const Signup = () => {
     confirmPassword: '',
   });
   const router = useRouter();
+  const auth = useAuth();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (data.password !== data.confirmPassword) return;
+
+    await auth?.signUp(data.email, data.password);
+    router.push('/');
   };
 
   const handleChange = (data: string, object: string) => {
