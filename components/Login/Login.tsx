@@ -1,7 +1,10 @@
+import { FirebaseError } from 'firebase/app';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useAuth } from '../../store/AuthContext';
+import { getAuthErrorMessage } from '../../utils/getAuthErrorMessage';
+import Loader from '../Loader/Loader';
 import classes from './Login.module.scss';
 
 type Data = {
@@ -15,6 +18,7 @@ const Login = () => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const router = useRouter();
   const auth = useAuth();
 
@@ -22,8 +26,15 @@ const Login = () => {
     setIsLoading(true);
     e.preventDefault();
 
-    await auth?.signIn(data.email, data.password);
-    router.push('/');
+    try {
+      await auth?.signIn(data.email, data.password);
+      router.push('/');
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.log(error.code);
+        setErrorMsg(getAuthErrorMessage(error.code));
+      }
+    }
 
     setIsLoading(false);
   };
@@ -33,7 +44,10 @@ const Login = () => {
   };
 
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
+    <form
+      className={`${classes.form} ${errorMsg && classes.error}`}
+      onSubmit={handleSubmit}
+    >
       <label className={classes.label} htmlFor='email'>
         Email
       </label>
@@ -54,11 +68,13 @@ const Login = () => {
         value={data.password}
         onChange={(e) => handleChange(e.target.value, 'password')}
       />
-      <button className={classes.button}>Sign in</button>
+      {errorMsg && <p className={classes.errorMsg}>{errorMsg}</p>}
+      <button className={classes.button}>
+        {isLoading ? <Loader /> : 'Sign in'}
+      </button>
       <p className={classes.question}>
         Don`t have an account? <Link href='/signup'>Sign up</Link>
       </p>
-      {isLoading && <p>Loading...</p>}
     </form>
   );
 };

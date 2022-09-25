@@ -15,7 +15,6 @@ type Props = {
 type User = {
   uid: string;
   email: string;
-  username: string;
 };
 
 type Auth = {
@@ -38,7 +37,6 @@ export const AuthContextProvider = ({ children }: Props) => {
         setUser({
           uid: user.uid,
           email: user.email as string,
-          username: user.displayName as string,
         });
       } else {
         setUser(null);

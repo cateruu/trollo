@@ -4,12 +4,17 @@
   display: flex;
   flex-direction: column;
   width: 350px;
+
+  &.error .label {
+    color: $error;
+  }
 }
 
 .label {
   font-size: 1.2rem;
   color: $main-text;
   margin-left: 10px;
+  transition: 0.1s;
 }
 
 .input {
@@ -39,6 +44,10 @@
   color: #fff;
   font-size: 1.2rem;
   cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .question {
@@ -50,4 +59,11 @@
   a {
     color: $secondary;
   }
+}
+
+.errorMsg {
+  font-size: 0.9rem;
+  color: $error;
+  margin-left: 10px;
+  margin-bottom: 3px;
 }

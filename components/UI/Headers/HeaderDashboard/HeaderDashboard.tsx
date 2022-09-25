@@ -3,9 +3,9 @@ import { useAuth } from '../../../../store/AuthContext';
 import classes from './HeaderDashboard.module.scss';
 
 const HeaderDashboard = () => {
-  const router = useRouter();
   const auth = useAuth();
 
+  console.log(auth?.user);
   return (
     <header className={classes.header}>
       <h1 className={classes.name}>Trollo</h1>
