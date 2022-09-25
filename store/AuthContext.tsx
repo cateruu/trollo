@@ -1,3 +1,4 @@
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -5,7 +6,6 @@ import {
   signOut,
   UserCredential,
 } from 'firebase/auth';
-import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../config/firebase';
 
 type Props = {

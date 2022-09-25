@@ -13,7 +13,6 @@ const HeaderDashboard = () => {
         className={classes.logout}
         onClick={async () => {
           await auth?.signOut();
-          router.push('/login');
         }}
       >
         Log out
