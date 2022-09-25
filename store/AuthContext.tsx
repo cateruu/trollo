@@ -1,4 +1,10 @@
-import { onAuthStateChanged } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  UserCredential,
+} from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../config/firebase';
 
@@ -12,7 +18,14 @@ type User = {
   username: string;
 };
 
-const AuthContext = createContext<User | null>(null);
+type Auth = {
+  user: User | null;
+  signUp: (email: string, password: string) => Promise<UserCredential>;
+  signIn: (email: string, password: string) => Promise<UserCredential>;
+  signOut: () => Promise<void>;
+};
+
+const AuthContext = createContext<Auth | null>(null);
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -35,7 +48,27 @@ export const AuthContextProvider = ({ children }: Props) => {
     });
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  const signUp = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const signIn = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = async () => {
+    setUser(null);
+    await signOut(auth);
+  };
+
+  const value: Auth = {
+    user: user,
+    signUp: signUp,
+    signIn: signIn,
+    signOut: logout,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContext;
