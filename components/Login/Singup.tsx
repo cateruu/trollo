@@ -1,4 +1,3 @@
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -22,13 +21,6 @@ const Signup = () => {
     e.preventDefault();
 
     if (data.password !== data.confirmPassword) return;
-
-    const { user, error } = await supabaseClient.auth.signUp({
-      email: data.email,
-      password: data.password,
-    });
-
-    router.push('/');
   };
 
   const handleChange = (data: string, object: string) => {
