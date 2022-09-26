@@ -40,6 +40,7 @@ const AddProjectModal = ({ openAddProject }: Props) => {
     }
 
     try {
+      openAddProject();
       await addDoc(collection(db, 'projects'), {
         id: uuidv4(),
         creator_uid: auth?.user?.uid,
@@ -48,7 +49,6 @@ const AddProjectModal = ({ openAddProject }: Props) => {
         color: details.color,
         members: members,
       });
-      openAddProject();
     } catch (error) {
       console.error(error);
     }
