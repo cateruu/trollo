@@ -18,10 +18,12 @@ import {
 import { db } from '../config/firebase';
 import { useAuth } from '../store/AuthContext';
 import Project from '../components/Project/Project';
+import AddProjectModal from '../components/Modals/AddProject/AddProjectModal';
 
 const Home: NextPage = () => {
   const auth = useAuth();
   const [projects, setProjects] = useState<Project[] | null>(null);
+  const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
 
   useEffect(() => {
     const q = query(
@@ -41,6 +43,10 @@ const Home: NextPage = () => {
     return () => unsub();
   }, [auth]);
 
+  const openAddProject = () => {
+    setIsAddProjectOpen(!isAddProjectOpen);
+  };
+
   return (
     <>
       <Head>
@@ -54,7 +60,7 @@ const Home: NextPage = () => {
           <div className={classes.header}>
             <h3 className={classes.name}>My Projects</h3>
             <IconContext.Provider value={{ className: classes.add }}>
-              <IoIosAddCircle />
+              <IoIosAddCircle onClick={openAddProject} />
             </IconContext.Provider>
           </div>
           <div className={classes.projects}>
@@ -63,6 +69,9 @@ const Home: NextPage = () => {
             ))}
           </div>
         </section>
+        {isAddProjectOpen && (
+          <AddProjectModal openAddProject={openAddProject} />
+        )}
       </main>
     </>
   );
