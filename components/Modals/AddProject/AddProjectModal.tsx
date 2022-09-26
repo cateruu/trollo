@@ -2,6 +2,10 @@ import { FormEvent, useState } from 'react';
 import classes from './AddProjectModal.module.scss';
 
 import { RiArrowRightCircleFill } from 'react-icons/ri';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../../config/firebase';
+import { useAuth } from '../../../store/AuthContext';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   openAddProject: () => void;
@@ -19,18 +23,53 @@ const AddProjectModal = ({ openAddProject }: Props) => {
     description: '',
     color: 'F07575',
   });
+  const [memberInput, setMemberInput] = useState<string>('');
+  const [members, setMembers] = useState<string[]>([]);
+  const auth = useAuth();
 
-  const handleChange = (value: string, object: string) => {
+  const handleDetailsChange = (value: string, object: string) => {
     setDetails((prevDetails) => ({ ...prevDetails, [object]: value }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleDetailsSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!details) {
       openAddProject();
       return;
     }
+
+    try {
+      await addDoc(collection(db, 'projects'), {
+        id: uuidv4(),
+        creator_uid: auth?.user?.uid,
+        title: details.title,
+        description: details.description,
+        color: details.color,
+        members: members,
+      });
+      openAddProject();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleMemberInput = (value: string) => {
+    setMemberInput(value);
+  };
+
+  const handleMemberSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!memberInput) return;
+    setMemberInput('');
+    setMembers((prevMembers) => {
+      if (prevMembers.includes(memberInput)) {
+        return prevMembers;
+      }
+
+      return [...prevMembers, memberInput];
+    });
   };
 
   return (
@@ -38,22 +77,26 @@ const AddProjectModal = ({ openAddProject }: Props) => {
       <div className={classes.opacity} onClick={openAddProject}></div>
       <div className={classes.container}>
         <h2 className={classes.header}>Add project</h2>
-        <form className={classes.form} id='details' onSubmit={handleSubmit}>
+        <form
+          className={classes.form}
+          id='details'
+          onSubmit={handleDetailsSubmit}
+        >
           <label htmlFor='title' className={classes.label}>
             Title
           </label>
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='text'
               className={classes.input}
               id='title'
               value={details.title}
-              onChange={(e) => handleChange(e.target.value, 'title')}
+              onChange={(e) => handleDetailsChange(e.target.value, 'title')}
             />
             <select
               id='color'
               value={details.color}
-              onChange={(e) => handleChange(e.target.value, 'color')}
+              onChange={(e) => handleDetailsChange(e.target.value, 'color')}
               style={{
                 backgroundColor: `#${details.color}`,
                 marginBottom: '15px',
@@ -67,7 +110,6 @@ const AddProjectModal = ({ openAddProject }: Props) => {
               <option value='F075DC' style={{ backgroundColor: '#F075DC' }} />
             </select>
           </div>
-
           <label htmlFor='description' className={classes.label}>
             Description
           </label>
@@ -76,20 +118,32 @@ const AddProjectModal = ({ openAddProject }: Props) => {
             className={classes.input}
             id='description'
             value={details.description}
-            onChange={(e) => handleChange(e.target.value, 'description')}
+            onChange={(e) => handleDetailsChange(e.target.value, 'description')}
           />
         </form>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleMemberSubmit}>
           <label htmlFor='members' className={classes.label}>
             Add members
           </label>
-          <div className={classes.member}>
-            <input type='email' id='members' />
+          <div className={classes.memberInput}>
+            <input
+              type='email'
+              id='members'
+              value={memberInput}
+              onChange={(e) => handleMemberInput(e.target.value)}
+            />
             <button>
               <RiArrowRightCircleFill />
             </button>
           </div>
         </form>
+        {members && (
+          <div className={classes.members}>
+            {members.map((member) => {
+              return <p key={member}>{member}</p>;
+            })}
+          </div>
+        )}
         <div className={classes.buttons}>
           <button
             className={`${classes.button} ${classes.cancel}`}
