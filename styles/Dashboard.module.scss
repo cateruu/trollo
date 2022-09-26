@@ -1,0 +1,27 @@
+@use '../styles/variables' as *;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.projects {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  font-size: $font-section;
+}
+
+.add {
+  font-size: $font-normal;
+  margin-left: 20px;
+  cursor: pointer;
+}

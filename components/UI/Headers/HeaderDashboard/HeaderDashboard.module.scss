@@ -3,12 +3,13 @@
 .header {
   display: flex;
   flex-direction: column;
+  margin-bottom: 40px;
 }
 
 .name {
   font-family: 'Licorice';
   color: #6336e5;
-  font-size: 4rem;
+  font-size: $font-header;
 }
 
 .logout {

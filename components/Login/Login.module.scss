@@ -11,7 +11,7 @@
 }
 
 .label {
-  font-size: 1.2rem;
+  font-size: $font-normal;
   color: $main-text;
   margin-left: 10px;
   transition: 0.1s;
@@ -24,7 +24,7 @@
   border-radius: 10px;
   margin-bottom: 15px;
   padding: 10px 10px;
-  font-size: 1.2rem;
+  font-size: $font-normal;
   color: $main-text;
   outline: none;
   transition: 0.05s;
@@ -42,7 +42,7 @@
   outline: none;
   border-radius: 10px;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: $font-normal;
   cursor: pointer;
   position: relative;
   display: flex;
@@ -54,7 +54,7 @@
   align-self: center;
   margin-top: 5px;
   color: $bg-panel;
-  font-size: 0.9rem;
+  font-size: $font-small;
 
   a {
     color: $secondary;
@@ -62,7 +62,7 @@
 }
 
 .errorMsg {
-  font-size: 0.9rem;
+  font-size: $font-small;
   color: $error;
   margin-left: 10px;
   margin-bottom: 3px;
