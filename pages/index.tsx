@@ -8,34 +8,38 @@ import HeaderDashboard from '../components/UI/Headers/HeaderDashboard/HeaderDash
 import { IoIosAddCircle } from 'react-icons/io';
 import { IconContext } from 'react-icons/lib';
 
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import {
+  collection,
+  CollectionReference,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useAuth } from '../store/AuthContext';
+import Project from '../components/Project/Project';
 
 const Home: NextPage = () => {
   const auth = useAuth();
-  const [projects, setProjects] = useState(null);
+  const [projects, setProjects] = useState<Project[] | null>(null);
 
   useEffect(() => {
     const q = query(
-      collection(db, 'projects'),
+      collection(db, 'projects') as CollectionReference<Project>,
       where('creator_uid', '==', auth?.user?.uid)
     );
 
     const unsub = onSnapshot(q, (project) => {
-      project.forEach((doc) =>
-        setProjects((prevProjects) => {
-          if (!prevProjects) return [doc.data()];
+      const temp: Project[] = [];
+      project.forEach((doc) => {
+        temp.push(doc.data());
+      });
 
-          return [...prevProjects, doc.data()];
-        })
-      );
+      setProjects(temp);
     });
 
     return () => unsub();
   }, [auth]);
-
-  console.log(projects);
 
   return (
     <>
@@ -46,12 +50,17 @@ const Home: NextPage = () => {
       </Head>
       <main className={classes.main}>
         <HeaderDashboard />
-        <section className={classes.projects}>
+        <section className={classes.projectsContainer}>
           <div className={classes.header}>
             <h3 className={classes.name}>My Projects</h3>
             <IconContext.Provider value={{ className: classes.add }}>
               <IoIosAddCircle />
             </IconContext.Provider>
+          </div>
+          <div className={classes.projects}>
+            {projects?.map((project) => (
+              <Project key={project.id} data={project} />
+            ))}
           </div>
         </section>
       </main>

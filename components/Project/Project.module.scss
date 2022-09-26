@@ -1,0 +1,26 @@
+@use '../../styles/variables' as *;
+
+.project {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 10px;
+  color: #fff;
+  margin-top: 15px;
+}
+
+.title {
+  font-size: $font-title;
+  text-align: center;
+}
+
+.desc {
+  font-size: $font-normal;
+  text-align: center;
+}

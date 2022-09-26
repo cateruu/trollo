@@ -7,7 +7,7 @@
   padding: 20px;
 }
 
-.projects {
+.projectsContainer {
   width: 100%;
 }
 
@@ -24,4 +24,8 @@
   font-size: $font-normal;
   margin-left: 20px;
   cursor: pointer;
+}
+
+.projects {
+  display: flex;
 }
