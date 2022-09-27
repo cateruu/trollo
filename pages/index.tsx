@@ -23,6 +23,7 @@ import AddProjectModal from '../components/Modals/AddProject/AddProjectModal';
 const Home: NextPage = () => {
   const auth = useAuth();
   const [projects, setProjects] = useState<Project[] | null>(null);
+  const [sharedProjects, setSharedProjects] = useState<Project[] | null>(null);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
 
   useEffect(() => {
@@ -37,7 +38,25 @@ const Home: NextPage = () => {
         temp.push(doc.data());
       });
 
-      setProjects(temp);
+      if (temp.length > 0) setProjects(temp);
+    });
+
+    return () => unsub();
+  }, [auth]);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, 'projects') as CollectionReference<Project>,
+      where('shared_with', 'array-contains', auth?.user?.email)
+    );
+
+    const unsub = onSnapshot(q, (project) => {
+      const temp: Project[] = [];
+      project.forEach((doc) => {
+        temp.push(doc.data());
+      });
+
+      if (temp.length > 0) setSharedProjects(temp);
     });
 
     return () => unsub();
@@ -64,14 +83,24 @@ const Home: NextPage = () => {
             </IconContext.Provider>
           </div>
           <div className={classes.projects}>
-            {projects?.map((project) => (
-              <Project key={project.id} data={project} />
-            ))}
+            {projects &&
+              projects?.map((project) => (
+                <Project key={project.id} data={project} />
+              ))}
+            {!projects && <div className={classes.empty}>No projects</div>}
           </div>
         </section>
         {isAddProjectOpen && (
           <AddProjectModal openAddProject={openAddProject} />
         )}
+        <section className={classes.shared}>
+          <h3 className={classes.name}>Shared with me</h3>
+          <div className={classes.projects}>
+            {sharedProjects?.map((project) => (
+              <Project key={project.id} data={project} shared={true} />
+            ))}
+          </div>
+        </section>
       </main>
     </>
   );

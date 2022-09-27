@@ -29,3 +29,23 @@
 .projects {
   display: flex;
 }
+
+.empty {
+  height: 250px;
+  width: 250px;
+  line-height: 250px;
+  text-align: center;
+  background-color: $main-text;
+  border-radius: 10px;
+  font-size: $font-section;
+  color: $border;
+  margin: 15px 0;
+}
+
+.shared {
+  width: 100%;
+
+  & .name {
+    margin-top: 50px;
+  }
+}

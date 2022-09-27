@@ -44,10 +44,11 @@ const AddProjectModal = ({ openAddProject }: Props) => {
       await addDoc(collection(db, 'projects'), {
         id: uuidv4(),
         creator_uid: auth?.user?.uid,
+        creator_email: auth?.user?.email,
         title: details.title,
         description: details.description,
         color: details.color,
-        members: members,
+        shared_with: members,
       });
     } catch (error) {
       console.error(error);
