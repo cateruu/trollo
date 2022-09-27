@@ -127,7 +127,7 @@ const AddProjectModal = ({ openAddProject }: Props) => {
         </form>
         <form className={classes.form} onSubmit={handleMemberSubmit}>
           <label htmlFor='members' className={classes.label}>
-            Add members
+            Add member
           </label>
           <div className={classes.memberInput}>
             <input

@@ -13,7 +13,7 @@ const HeaderProject = ({ color }: Props) => {
   const auth = useAuth();
 
   return (
-    <header className={classes.header} style={{ backgroundColor: `#${color}` }}>
+    <nav className={classes.header} style={{ backgroundColor: `#${color}` }}>
       <button
         className={classes.back}
         style={{ backgroundColor: `#${color}` }}
@@ -29,7 +29,7 @@ const HeaderProject = ({ color }: Props) => {
       >
         Logout
       </button>
-    </header>
+    </nav>
   );
 };
 
