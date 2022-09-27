@@ -67,6 +67,8 @@ const AddProjectModal = ({ openAddProject }: Props) => {
     setMembers((prevMembers) => {
       if (prevMembers.includes(memberInput)) {
         return prevMembers;
+      } else if (memberInput === auth?.user?.email) {
+        return prevMembers;
       }
 
       return [...prevMembers, memberInput];
