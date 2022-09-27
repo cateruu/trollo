@@ -1,0 +1,43 @@
+@use '../../../../styles/variables' as *;
+
+.header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.name {
+  font-family: 'Licorice';
+  color: #fff;
+  font-size: $font-header;
+  height: 100%;
+  line-height: 150%;
+}
+
+.back {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  filter: brightness(1.1);
+
+  svg {
+    font-size: $font-normal;
+  }
+}
+
+.logout {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  color: #fff;
+  filter: brightness(1.1);
+  cursor: pointer;
+}

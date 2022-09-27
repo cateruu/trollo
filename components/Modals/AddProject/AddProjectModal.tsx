@@ -68,6 +68,7 @@ const AddProjectModal = ({ openAddProject }: Props) => {
       if (prevMembers.includes(memberInput)) {
         return prevMembers;
       } else if (memberInput === auth?.user?.email) {
+        console.error('cant share with myself!');
         return prevMembers;
       }
 
