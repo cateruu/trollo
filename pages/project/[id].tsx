@@ -61,7 +61,7 @@ const ProjectPage = () => {
           <ManageMembers
             members={project?.shared_with}
             handleOpenMembers={handleOpenMembers}
-            projectId={id}
+            projectId={id as string}
           />
         )}
       </main>
