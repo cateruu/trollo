@@ -2,13 +2,12 @@ import { FormEvent, useState } from 'react';
 
 import classes from './ManageMembers.module.scss';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
+import { AiOutlineClose } from 'react-icons/ai';
 import { useAuth } from '../../../store/AuthContext';
 import {
   arrayUnion,
   collection,
   CollectionReference,
-  doc,
-  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -68,14 +67,35 @@ const ManageMembers = ({ members, handleOpenMembers, projectId }: Props) => {
     } catch (error) {}
   };
 
+  const removeMember = (member: string) => {
+    setMembersData((prevMembers) => {
+      const temp: string[] = [];
+      prevMembers?.forEach((data) => {
+        if (data === member) return;
+
+        temp.push(data);
+      });
+
+      return temp;
+    });
+  };
+
   return (
     <>
       <div className={classes.opacity} onClick={handleOpenMembers}></div>
       <div className={classes.container}>
-        <h2 className={classes.header}>Add project</h2>
+        <h2 className={classes.header}>Manage members</h2>
         <div className={classes.members}>
           {membersData?.map((member) => (
-            <p key={member}>{member}</p>
+            <div key={member} className={classes.member}>
+              <div
+                className={classes.remove}
+                onClick={() => removeMember(member)}
+              >
+                <AiOutlineClose />
+              </div>
+              {member}
+            </div>
           ))}
         </div>
         <form className={classes.form} onSubmit={handleMemberSubmit}>
@@ -94,6 +114,9 @@ const ManageMembers = ({ members, handleOpenMembers, projectId }: Props) => {
             </button>
           </div>
         </form>
+        <button className={classes.exit} onClick={handleOpenMembers}>
+          Close
+        </button>
       </div>
     </>
   );

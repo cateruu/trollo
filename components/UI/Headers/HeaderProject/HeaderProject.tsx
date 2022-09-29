@@ -27,7 +27,7 @@ const HeaderProject = ({ color }: Props) => {
         style={{ backgroundColor: `#${color}` }}
         onClick={async () => await auth?.signOut()}
       >
-        Logout
+        Log out
       </button>
     </nav>
   );

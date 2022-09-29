@@ -19,7 +19,7 @@
   background-color: #fff;
   padding: 20px 10px;
   border-radius: 10px;
-  width: 250px;
+  width: 300px;
 }
 
 .header {
@@ -32,19 +32,39 @@
 .members {
   display: flex;
   flex-wrap: wrap;
+}
 
-  p {
-    background-color: $light-text;
-    border-radius: 10px;
-    padding: 10px;
-    font-size: $font-small;
-    color: #fff;
-    margin: 3px;
+.member {
+  background-color: $light-text;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: $font-small;
+  color: #fff;
+  margin: 3px;
+  position: relative;
+}
+
+.remove {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  color: $error;
+  cursor: pointer;
+
+  svg {
+    font-size: 0.7rem;
   }
 }
 
 .form {
   margin-top: 15px;
+}
+
+.label {
+  font-size: $font-normal;
+  color: $main-text;
+  margin-left: 10px;
+  transition: 0.1s;
 }
 
 .memberInput {
@@ -77,5 +97,24 @@
     line-height: 50%;
     font-size: 1.7rem;
     color: $secondary;
+  }
+}
+
+.exit {
+  width: 100%;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 5px 0;
+  background: none;
+  outline: none;
+  color: $border;
+  cursor: pointer;
+  transition: 0.1s;
+  text-transform: uppercase;
+  font-size: $font-normal;
+
+  &:hover {
+    background-color: $light-text;
+    color: #fff;
   }
 }

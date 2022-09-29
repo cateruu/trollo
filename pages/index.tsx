@@ -87,7 +87,11 @@ const Home: NextPage = () => {
               projects?.map((project) => (
                 <Project key={project.id} data={project} />
               ))}
-            {!projects && <div className={classes.empty}>No projects</div>}
+            {!projects && (
+              <div className={classes.empty} onClick={openAddProject}>
+                Add project
+              </div>
+            )}
           </div>
         </section>
         {isAddProjectOpen && (

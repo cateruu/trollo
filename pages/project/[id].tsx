@@ -10,7 +10,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
 import HeaderProject from '../../components/UI/Headers/HeaderProject/HeaderProject';
-import { db } from '../../config/firebase';
+import { auth, db } from '../../config/firebase';
+import { useAuth } from '../../store/AuthContext';
 
 import classes from '../../styles/Project.module.scss';
 
@@ -18,6 +19,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
 
+  const auth = useAuth();
   const router = useRouter();
   const { id } = router.query;
 
@@ -48,13 +50,15 @@ const ProjectPage = () => {
         <section className={classes.container}>
           <header className={classes.header}>
             <h3 className={classes.name}>{project?.title}</h3>
-            <button
-              className={classes.members}
-              style={{ backgroundColor: `#${project?.color}` }}
-              onClick={handleOpenMembers}
-            >
-              Manage members
-            </button>
+            {auth?.user?.uid === project?.creator_uid && (
+              <button
+                className={classes.members}
+                style={{ backgroundColor: `#${project?.color}` }}
+                onClick={handleOpenMembers}
+              >
+                Manage members
+              </button>
+            )}
           </header>
         </section>
         {isManageMembersOpen && (
