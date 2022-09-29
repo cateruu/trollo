@@ -5,6 +5,7 @@ import { RiArrowRightCircleFill } from 'react-icons/ri';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useAuth } from '../../../store/AuthContext';
 import {
+  arrayRemove,
   arrayUnion,
   collection,
   CollectionReference,
@@ -64,10 +65,12 @@ const ManageMembers = ({ members, handleOpenMembers, projectId }: Props) => {
           shared_with: arrayUnion(memberInput),
         });
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const removeMember = (member: string) => {
+  const removeMember = async (member: string) => {
     setMembersData((prevMembers) => {
       const temp: string[] = [];
       prevMembers?.forEach((data) => {
@@ -78,6 +81,22 @@ const ManageMembers = ({ members, handleOpenMembers, projectId }: Props) => {
 
       return temp;
     });
+
+    try {
+      const q = query(
+        collection(db, 'projects') as CollectionReference<Project>,
+        where('id', '==', projectId)
+      );
+      const docRef = await getDocs(q);
+      docRef.forEach((doc) => {
+        updateDoc(doc.ref, {
+          ...doc.data,
+          shared_with: arrayRemove(member),
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
