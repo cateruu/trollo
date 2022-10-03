@@ -7,11 +7,11 @@ import {
 } from 'firebase/firestore';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
 import HeaderProject from '../../components/UI/Headers/HeaderProject/HeaderProject';
-import { auth, db } from '../../config/firebase';
+import { db } from '../../config/firebase';
 import { useAuth } from '../../store/AuthContext';
 
 import classes from '../../styles/Project.module.scss';
@@ -21,6 +21,7 @@ const ProjectPage = () => {
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [categories, setCategories] = useState(null);
+  const projectId = useRef<string>('');
 
   const auth = useAuth();
   const router = useRouter();
@@ -33,7 +34,10 @@ const ProjectPage = () => {
     );
 
     const unsub = onSnapshot(q, (project) => {
-      project.forEach((doc) => setProject(doc.data()));
+      project.forEach((doc) => {
+        projectId.current = doc.id;
+        setProject(doc.data());
+      });
     });
 
     return () => unsub();
@@ -80,7 +84,12 @@ const ProjectPage = () => {
             projectId={id as string}
           />
         )}
-        {isAddCardOpen && <AddCard handleAddCard={handleAddCard} />}
+        {isAddCardOpen && (
+          <AddCard
+            handleAddCard={handleAddCard}
+            projectId={projectId.current}
+          />
+        )}
       </main>
     </>
   );
