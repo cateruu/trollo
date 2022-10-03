@@ -8,6 +8,7 @@ import {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
 import HeaderProject from '../../components/UI/Headers/HeaderProject/HeaderProject';
 import { auth, db } from '../../config/firebase';
@@ -18,6 +19,8 @@ import classes from '../../styles/Project.module.scss';
 const ProjectPage = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
+  const [isAddCardOpen, setIsAddCardOpen] = useState(false);
+  const [categories, setCategories] = useState(null);
 
   const auth = useAuth();
   const router = useRouter();
@@ -40,6 +43,10 @@ const ProjectPage = () => {
     setIsManageMembersOpen(!isManageMembersOpen);
   };
 
+  const handleAddCard = () => {
+    setIsAddCardOpen(!isAddCardOpen);
+  };
+
   return (
     <>
       <Head>
@@ -47,7 +54,7 @@ const ProjectPage = () => {
       </Head>
       <main>
         <HeaderProject color={project?.color} />
-        <section className={classes.container}>
+        <article className={classes.container}>
           <header className={classes.header}>
             <h3 className={classes.name}>{project?.title}</h3>
             {auth?.user?.uid === project?.creator_uid && (
@@ -60,7 +67,12 @@ const ProjectPage = () => {
               </button>
             )}
           </header>
-        </section>
+          <section className={classes.cards}>
+            <button className={classes.add} onClick={handleAddCard}>
+              Add card
+            </button>
+          </section>
+        </article>
         {isManageMembersOpen && (
           <ManageMembers
             members={project?.shared_with}
@@ -68,6 +80,7 @@ const ProjectPage = () => {
             projectId={id as string}
           />
         )}
+        {isAddCardOpen && <AddCard handleAddCard={handleAddCard} />}
       </main>
     </>
   );
