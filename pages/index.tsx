@@ -13,6 +13,7 @@ import {
   CollectionReference,
   onSnapshot,
   query,
+  QueryDocumentSnapshot,
   where,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
@@ -22,8 +23,12 @@ import AddProjectModal from '../components/Modals/AddProject/AddProjectModal';
 
 const Home: NextPage = () => {
   const auth = useAuth();
-  const [projects, setProjects] = useState<Project[] | null>(null);
-  const [sharedProjects, setSharedProjects] = useState<Project[] | null>(null);
+  const [projects, setProjects] = useState<
+    QueryDocumentSnapshot<Project>[] | null
+  >(null);
+  const [sharedProjects, setSharedProjects] = useState<
+    QueryDocumentSnapshot<Project>[] | null
+  >(null);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
 
   useEffect(() => {
@@ -32,16 +37,7 @@ const Home: NextPage = () => {
       where('creator_uid', '==', auth?.user?.uid)
     );
 
-    const unsub = onSnapshot(q, (project) => {
-      const temp: Project[] = [];
-      project.forEach((doc) => {
-        temp.push(doc.data());
-      });
-
-      if (temp.length > 0) setProjects(temp);
-    });
-
-    return () => unsub();
+    return onSnapshot(q, (projects) => setProjects(projects.docs));
   }, [auth]);
 
   useEffect(() => {
@@ -50,16 +46,7 @@ const Home: NextPage = () => {
       where('shared_with', 'array-contains', auth?.user?.email)
     );
 
-    const unsub = onSnapshot(q, (project) => {
-      const temp: Project[] = [];
-      project.forEach((doc) => {
-        temp.push(doc.data());
-      });
-
-      if (temp.length > 0) setSharedProjects(temp);
-    });
-
-    return () => unsub();
+    return onSnapshot(q, (projects) => setSharedProjects(projects.docs));
   }, [auth]);
 
   const openAddProject = () => {
@@ -85,7 +72,11 @@ const Home: NextPage = () => {
           <div className={classes.projects}>
             {projects &&
               projects?.map((project) => (
-                <Project key={project.id} data={project} />
+                <Project
+                  key={project.id}
+                  projectId={project.id}
+                  data={project.data()}
+                />
               ))}
             {!projects && (
               <div className={classes.empty} onClick={openAddProject}>
@@ -101,7 +92,12 @@ const Home: NextPage = () => {
           <h3 className={classes.name}>Shared with me</h3>
           <div className={classes.projects}>
             {sharedProjects?.map((project) => (
-              <Project key={project.id} data={project} shared={true} />
+              <Project
+                key={project.id}
+                projectId={project.id}
+                data={project.data()}
+                shared={true}
+              />
             ))}
           </div>
         </section>

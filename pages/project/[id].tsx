@@ -1,6 +1,9 @@
 import {
   collection,
   CollectionReference,
+  doc,
+  DocumentSnapshot,
+  getDoc,
   onSnapshot,
   query,
   where,
@@ -10,6 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
+import Card from '../../components/UI/Card/Card';
 import HeaderProject from '../../components/UI/Headers/HeaderProject/HeaderProject';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../store/AuthContext';
@@ -20,27 +24,44 @@ const ProjectPage = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
-  const [categories, setCategories] = useState(null);
-  const projectId = useRef<string>('');
+  const [cards, setCards] = useState<Card[] | null>(null);
 
   const auth = useAuth();
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    const q = query(
-      collection(db, 'projects') as CollectionReference<Project>,
-      where('id', '==', id)
+    const getProject = async () => {
+      const docRef = doc(db, 'projects', id as string);
+      const docSnap = (await getDoc(docRef)) as DocumentSnapshot<Project>;
+
+      if (docSnap.exists()) {
+        setProject(docSnap.data());
+      } else {
+        console.error('No project found!');
+      }
+    };
+
+    getProject();
+  }, [id]);
+
+  useEffect(() => {
+    return onSnapshot(
+      collection(
+        db,
+        'projects',
+        id as string,
+        'cards'
+      ) as CollectionReference<Card>,
+      (cards) => {
+        const temp: Card[] = [];
+        cards.forEach((doc) => {
+          temp.push(doc.data());
+        });
+
+        if (temp.length > 0) setCards(temp);
+      }
     );
-
-    const unsub = onSnapshot(q, (project) => {
-      project.forEach((doc) => {
-        projectId.current = doc.id;
-        setProject(doc.data());
-      });
-    });
-
-    return () => unsub();
   }, [id]);
 
   const handleOpenMembers = () => {
@@ -72,6 +93,9 @@ const ProjectPage = () => {
             )}
           </header>
           <section className={classes.cards}>
+            {cards?.map((card) => (
+              <Card key={card.id} data={card} />
+            ))}
             <button className={classes.add} onClick={handleAddCard}>
               Add card
             </button>
@@ -85,10 +109,7 @@ const ProjectPage = () => {
           />
         )}
         {isAddCardOpen && (
-          <AddCard
-            handleAddCard={handleAddCard}
-            projectId={projectId.current}
-          />
+          <AddCard handleAddCard={handleAddCard} projectId={id as string} />
         )}
       </main>
     </>

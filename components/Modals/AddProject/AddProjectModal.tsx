@@ -42,7 +42,6 @@ const AddProjectModal = ({ openAddProject }: Props) => {
     try {
       openAddProject();
       await addDoc(collection(db, 'projects'), {
-        id: uuidv4(),
         creator_uid: auth?.user?.uid,
         creator_email: auth?.user?.email,
         title: details.title,

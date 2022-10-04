@@ -8,3 +8,9 @@ interface Project {
   color: string;
   shared_with: string[];
 }
+
+interface Card {
+  id: string;
+  title: string;
+  color: string;
+}
