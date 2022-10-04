@@ -10,7 +10,6 @@ interface Project {
 }
 
 interface Card {
-  id: string;
   title: string;
   color: string;
 }

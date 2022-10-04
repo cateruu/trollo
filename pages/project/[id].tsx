@@ -6,6 +6,7 @@ import {
   getDoc,
   onSnapshot,
   query,
+  QueryDocumentSnapshot,
   where,
 } from 'firebase/firestore';
 import Head from 'next/head';
@@ -24,7 +25,9 @@ const ProjectPage = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
-  const [cards, setCards] = useState<Card[] | null>(null);
+  const [cards, setCards] = useState<QueryDocumentSnapshot<Card>[] | null>(
+    null
+  );
 
   const auth = useAuth();
   const router = useRouter();
@@ -53,14 +56,7 @@ const ProjectPage = () => {
         id as string,
         'cards'
       ) as CollectionReference<Card>,
-      (cards) => {
-        const temp: Card[] = [];
-        cards.forEach((doc) => {
-          temp.push(doc.data());
-        });
-
-        if (temp.length > 0) setCards(temp);
-      }
+      (cards) => setCards(cards.docs)
     );
   }, [id]);
 
@@ -94,7 +90,7 @@ const ProjectPage = () => {
           </header>
           <section className={classes.cards}>
             {cards?.map((card) => (
-              <Card key={card.id} data={card} />
+              <Card key={card.id} cardId={card.id} data={card.data()} />
             ))}
             <button className={classes.add} onClick={handleAddCard}>
               Add card

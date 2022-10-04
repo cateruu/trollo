@@ -30,6 +30,7 @@
 
 .cards {
   display: flex;
+  overflow: scroll;
 }
 
 .add {
@@ -44,4 +45,5 @@
   text-align: center;
   cursor: pointer;
   text-transform: uppercase;
+  flex-shrink: 0;
 }

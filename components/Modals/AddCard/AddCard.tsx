@@ -2,7 +2,6 @@ import { addDoc, collection } from 'firebase/firestore';
 import { FormEvent, useState } from 'react';
 import { db } from '../../../config/firebase';
 import classes from './AddCard.module.scss';
-import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   handleAddCard: () => void;
@@ -35,7 +34,6 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
     try {
       handleAddCard();
       await addDoc(collection(db, 'projects', projectId, 'cards'), {
-        id: uuidv4(),
         title: details.title,
         color: details.color,
       });

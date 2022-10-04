@@ -5,7 +5,6 @@ import { RiArrowRightCircleFill } from 'react-icons/ri';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { useAuth } from '../../../store/AuthContext';
-import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   openAddProject: () => void;
