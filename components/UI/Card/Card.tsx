@@ -12,6 +12,7 @@ const Card = ({ cardId, data }: Props) => {
       style={{ borderTop: `5px solid #${data.color}` }}
     >
       <header className={classes.header}>{data.title}</header>
+      <button className={classes.add}>Add task</button>
     </section>
   );
 };

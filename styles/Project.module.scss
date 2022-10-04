@@ -66,4 +66,10 @@
   cursor: pointer;
   text-transform: uppercase;
   flex-shrink: 0;
+  transition: 0.1s;
+
+  &:hover {
+    border-color: $main-text;
+    color: $main-text;
+  }
 }
