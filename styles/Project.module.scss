@@ -1,5 +1,9 @@
 @use '../styles//variables' as *;
 
+.main {
+  height: calc(100vh - 160px);
+}
+
 .container {
   width: 100%;
   height: 100%;
@@ -30,7 +34,23 @@
 
 .cards {
   display: flex;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-bottom: 20px;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $border;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 5px;
+    border-radius: 5px;
+    background-color: $main-text;
+  }
 }
 
 .add {

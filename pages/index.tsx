@@ -70,15 +70,15 @@ const Home: NextPage = () => {
             </IconContext.Provider>
           </div>
           <div className={classes.projects}>
-            {projects &&
+            {projects?.length! > 0 ? (
               projects?.map((project) => (
                 <Project
                   key={project.id}
                   projectId={project.id}
                   data={project.data()}
                 />
-              ))}
-            {!projects && (
+              ))
+            ) : (
               <div className={classes.empty} onClick={openAddProject}>
                 Add project
               </div>

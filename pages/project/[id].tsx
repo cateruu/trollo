@@ -73,7 +73,7 @@ const ProjectPage = () => {
       <Head>
         <title>Trollo - {project?.title}</title>
       </Head>
-      <main>
+      <main className={classes.main}>
         <HeaderProject color={project?.color} />
         <article className={classes.container}>
           <header className={classes.header}>
