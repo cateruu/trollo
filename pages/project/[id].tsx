@@ -5,9 +5,7 @@ import {
   DocumentSnapshot,
   getDoc,
   onSnapshot,
-  query,
   QueryDocumentSnapshot,
-  where,
 } from 'firebase/firestore';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -90,7 +88,12 @@ const ProjectPage = () => {
           </header>
           <section className={classes.cards}>
             {cards?.map((card) => (
-              <Card key={card.id} cardId={card.id} data={card.data()} />
+              <Card
+                key={card.id}
+                cardId={card.id}
+                projectId={id as string}
+                data={card.data()}
+              />
             ))}
             <button className={classes.add} onClick={handleAddCard}>
               Add card

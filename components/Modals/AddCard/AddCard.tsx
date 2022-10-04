@@ -47,7 +47,7 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
       <div className={classes.opacity} onClick={handleAddCard}></div>
       <div className={classes.container}>
         <h2 className={classes.header}>Add card</h2>
-        <form className={classes.form} onSubmit={handleDetailsSubmit}>
+        <form className={classes.form} onSubmit={handleDetailsSubmit} id='form'>
           <label htmlFor='title' className={classes.label}>
             Title
           </label>
@@ -76,16 +76,18 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
               <option value='F075DC' style={{ backgroundColor: '#F075DC' }} />
             </select>
           </div>
-          <div className={classes.buttons}>
-            <button
-              className={`${classes.button} ${classes.cancel}`}
-              onClick={handleAddCard}
-            >
-              Cancel
-            </button>
-            <button className={`${classes.button} ${classes.add}`}>Add</button>
-          </div>
         </form>
+        <div className={classes.buttons}>
+          <button
+            className={`${classes.button} ${classes.cancel}`}
+            onClick={handleAddCard}
+          >
+            Cancel
+          </button>
+          <button className={`${classes.button} ${classes.add}`} form='form'>
+            Add
+          </button>
+        </div>
       </div>
     </>
   );

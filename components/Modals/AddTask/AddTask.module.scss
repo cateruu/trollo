@@ -1,0 +1,122 @@
+@use '../../../styles/variables' as *;
+
+.opacity {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $main-text;
+  filter: opacity(0.8);
+}
+
+.container {
+  z-index: 100;
+  color: $main-text;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+}
+
+.header {
+  font-size: $font-section;
+  margin-bottom: 20px;
+  align-self: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: $font-normal;
+  color: $main-text;
+  margin-left: 10px;
+  transition: 0.1s;
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 10px 10px;
+  font-size: $font-normal;
+  color: $main-text;
+  outline: none;
+  transition: 0.05s;
+
+  &:focus {
+    border-color: $main;
+  }
+}
+
+.select {
+  width: 100%;
+  height: 50px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 10px 10px;
+  font-size: $font-normal;
+  color: $main-text;
+  outline: none;
+  transition: 0.05s;
+
+  &:focus {
+    border-color: $main;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  width: 100px;
+  height: 35px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: $font-normal;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  text-transform: uppercase;
+}
+
+.cancel {
+  border: 1px solid $border;
+  color: $border;
+  background-color: transparent;
+  transition: 0.1s;
+
+  &:hover {
+    background-color: $border;
+    color: #fff;
+  }
+}
+
+.add {
+  background-color: $secondary;
+  transition: 0.1s;
+
+  &:hover {
+    background-color: darken($secondary, 10);
+  }
+}

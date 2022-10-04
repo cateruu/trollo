@@ -13,3 +13,8 @@ interface Card {
   title: string;
   color: string;
 }
+
+interface Task {
+  task: string;
+  priority: string;
+}
