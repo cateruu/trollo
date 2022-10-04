@@ -50,7 +50,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
       >
         <header className={classes.header}>{data.title}</header>
         {tasks?.map((task) => (
-          <Task key={task.id} />
+          <Task key={task.id} data={task.data()} />
         ))}
         <button className={classes.add} onClick={handleAddTask}>
           Add task
