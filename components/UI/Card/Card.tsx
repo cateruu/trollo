@@ -36,8 +36,6 @@ const Card = ({ cardId, projectId, data }: Props) => {
     );
   }, [projectId, cardId]);
 
-  console.log(tasks);
-
   const handleAddTask = () => {
     setIsAddTaskOpen(!isAddTaskOpen);
   };
