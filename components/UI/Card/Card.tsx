@@ -10,6 +10,9 @@ import AddTask from '../../Modals/AddTask/AddTask';
 import Task from '../Task/Task';
 import classes from './Card.module.scss';
 
+import { FiEdit2 } from 'react-icons/fi';
+import { IconContext } from 'react-icons';
+
 type Props = {
   cardId: string;
   projectId: string;
@@ -46,6 +49,9 @@ const Card = ({ cardId, projectId, data }: Props) => {
         className={classes.card}
         style={{ borderTop: `5px solid #${data.color}` }}
       >
+        <IconContext.Provider value={{ className: classes.edit }}>
+          <FiEdit2 />
+        </IconContext.Provider>
         <header className={classes.header}>{data.title}</header>
         {tasks?.map((task) => (
           <Task key={task.id} data={task.data()} />
