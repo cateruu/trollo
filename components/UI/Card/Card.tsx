@@ -1,8 +1,10 @@
 import {
   collection,
   CollectionReference,
+  doc,
   onSnapshot,
   QueryDocumentSnapshot,
+  updateDoc,
 } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../../config/firebase';
@@ -56,6 +58,20 @@ const Card = ({ cardId, projectId, data }: Props) => {
     setTitleInput(input);
   };
 
+  const submitNewTitle = async () => {
+    const cardRef = doc(db, 'projects', projectId, 'cards', cardId);
+
+    try {
+      await updateDoc(cardRef, {
+        title: titleInput,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
+    handleOpenEditMode();
+  };
+
   return (
     <>
       <section
@@ -81,7 +97,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
                 onChange={(e) => handleTitleInput(e.target.value)}
               />
               <button>
-                <RiArrowRightCircleFill />
+                <RiArrowRightCircleFill onClick={submitNewTitle} />
               </button>
             </div>
           ) : (
