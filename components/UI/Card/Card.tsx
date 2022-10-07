@@ -13,6 +13,7 @@ import classes from './Card.module.scss';
 import { FiEdit2 } from 'react-icons/fi';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
+import { RiArrowRightCircleFill } from 'react-icons/ri';
 
 type Props = {
   cardId: string;
@@ -26,6 +27,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
     null
   );
   const [editModeOpen, setEditModeOpen] = useState(false);
+  const [titleInput, setTitleInput] = useState(data.title);
 
   useEffect(() => {
     return onSnapshot(
@@ -46,7 +48,12 @@ const Card = ({ cardId, projectId, data }: Props) => {
   };
 
   const handleOpenEditMode = () => {
+    setTitleInput(data.title);
     setEditModeOpen(!editModeOpen);
+  };
+
+  const handleTitleInput = (input: string) => {
+    setTitleInput(input);
   };
 
   return (
@@ -64,7 +71,23 @@ const Card = ({ cardId, projectId, data }: Props) => {
             <FiEdit2 onClick={handleOpenEditMode} />
           </IconContext.Provider>
         )}
-        <header className={classes.header}>{data.title}</header>
+        <header className={classes.header}>
+          {editModeOpen ? (
+            <div className={classes.titleInput}>
+              <input
+                type='email'
+                id='members'
+                value={titleInput}
+                onChange={(e) => handleTitleInput(e.target.value)}
+              />
+              <button>
+                <RiArrowRightCircleFill />
+              </button>
+            </div>
+          ) : (
+            data.title
+          )}
+        </header>
         {tasks?.map((task) => (
           <Task key={task.id} data={task.data()} />
         ))}
