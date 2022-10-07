@@ -11,6 +11,7 @@ import Task from '../Task/Task';
 import classes from './Card.module.scss';
 
 import { FiEdit2 } from 'react-icons/fi';
+import { AiFillCloseCircle } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
 
 type Props = {
@@ -24,6 +25,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
   const [tasks, setTasks] = useState<QueryDocumentSnapshot<Task>[] | null>(
     null
   );
+  const [editModeOpen, setEditModeOpen] = useState(false);
 
   useEffect(() => {
     return onSnapshot(
@@ -43,15 +45,25 @@ const Card = ({ cardId, projectId, data }: Props) => {
     setIsAddTaskOpen(!isAddTaskOpen);
   };
 
+  const handleOpenEditMode = () => {
+    setEditModeOpen(!editModeOpen);
+  };
+
   return (
     <>
       <section
         className={classes.card}
         style={{ borderTop: `5px solid #${data.color}` }}
       >
-        <IconContext.Provider value={{ className: classes.edit }}>
-          <FiEdit2 />
-        </IconContext.Provider>
+        {editModeOpen ? (
+          <IconContext.Provider value={{ className: classes.close }}>
+            <AiFillCloseCircle onClick={handleOpenEditMode} />
+          </IconContext.Provider>
+        ) : (
+          <IconContext.Provider value={{ className: classes.edit }}>
+            <FiEdit2 onClick={handleOpenEditMode} />
+          </IconContext.Provider>
+        )}
         <header className={classes.header}>{data.title}</header>
         {tasks?.map((task) => (
           <Task key={task.id} data={task.data()} />
