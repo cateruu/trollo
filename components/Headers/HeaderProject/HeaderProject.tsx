@@ -21,7 +21,10 @@ const HeaderProject = ({ color }: Props) => {
       <button
         className={classes.back}
         style={{ backgroundColor: `#${color}` }}
-        onClick={() => router.push('/')}
+        onClick={() => {
+          if (editMode) handleEditModeChange();
+          router.push('/');
+        }}
       >
         <AiFillAppstore /> Back home
       </button>

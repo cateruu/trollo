@@ -1,5 +1,5 @@
 import { doc, updateDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../store/AuthContext';
@@ -14,9 +14,12 @@ type Props = {
 
 const Header = ({ project, handleOpenMembers, projectId }: Props) => {
   const [titleInput, setTitleInput] = useState(project?.title);
-
   const auth = useAuth();
   const { editMode, handleEditModeChange } = useEditProject();
+
+  useEffect(() => {
+    setTitleInput(project?.title);
+  }, [project]);
 
   const handleTitleInput = (title: string) => {
     setTitleInput(title);

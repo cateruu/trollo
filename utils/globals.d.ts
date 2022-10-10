@@ -12,9 +12,11 @@ interface Project {
 interface Card {
   title: string;
   color: string;
+  timestamp: Date;
 }
 
 interface Task {
   task: string;
   priority: string;
+  timestamp: Date;
 }

@@ -17,8 +17,10 @@ import classes from './Card.module.scss';
 
 import { FiEdit2 } from 'react-icons/fi';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IconContext } from 'react-icons';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
+import { useEditProject } from '../../store/EditProjectContext';
 
 type Props = {
   cardId: string;
@@ -33,6 +35,8 @@ const Card = ({ cardId, projectId, data }: Props) => {
   );
   const [editModeOpen, setEditModeOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(data.title);
+
+  const { editMode } = useEditProject();
 
   useEffect(() => {
     const q = query(
@@ -78,7 +82,13 @@ const Card = ({ cardId, projectId, data }: Props) => {
   };
 
   return (
-    <>
+    <section>
+      {editMode && (
+        <div className={classes.editOrder}>
+          <BsArrowLeft />
+          <BsArrowRight />
+        </div>
+      )}
       <section
         className={classes.card}
         style={{ borderTop: `5px solid #${data.color}` }}
@@ -129,7 +139,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
           projectId={projectId}
         />
       )}
-    </>
+    </section>
   );
 };
 
