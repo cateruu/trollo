@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import classes from '../styles/Dashboard.module.scss';
 
-import HeaderDashboard from '../components/UI/Headers/HeaderDashboard/HeaderDashboard';
+import HeaderDashboard from '../components/Headers/HeaderDashboard/HeaderDashboard';
 import { IoIosAddCircle } from 'react-icons/io';
 import { IconContext } from 'react-icons/lib';
 

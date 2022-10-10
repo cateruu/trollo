@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useAuth } from '../../../../store/AuthContext';
+import { useAuth } from '../../../store/AuthContext';
 import classes from './HeaderDashboard.module.scss';
 
 const HeaderDashboard = () => {

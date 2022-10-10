@@ -10,28 +10,6 @@
   padding: 40px;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.name {
-  color: $main-text;
-  font-size: $font-section;
-}
-
-.members {
-  margin-left: 20px;
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 10px;
-  color: #fff;
-}
-
 .cards {
   display: flex;
   overflow-x: scroll;

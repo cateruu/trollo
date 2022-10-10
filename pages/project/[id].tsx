@@ -2,6 +2,7 @@ import {
   collection,
   CollectionReference,
   doc,
+  DocumentReference,
   DocumentSnapshot,
   getDoc,
   onSnapshot,
@@ -20,32 +21,24 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../store/AuthContext';
 
 import classes from '../../styles/Project.module.scss';
+import Header from '../../components/Project/Header';
 
 const ProjectPage = () => {
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<Project | undefined | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [cards, setCards] = useState<QueryDocumentSnapshot<Card>[] | null>(
     null
   );
 
-  const auth = useAuth();
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    const getProject = async () => {
-      const docRef = doc(db, 'projects', id as string);
-      const docSnap = (await getDoc(docRef)) as DocumentSnapshot<Project>;
-
-      if (docSnap.exists()) {
-        setProject(docSnap.data());
-      } else {
-        console.error('No project found!');
-      }
-    };
-
-    getProject();
+    return onSnapshot(
+      doc(db, 'projects', id as string) as DocumentReference<Project>,
+      (snapshot) => setProject(snapshot.data())
+    );
   }, [id]);
 
   useEffect(() => {
@@ -78,18 +71,11 @@ const ProjectPage = () => {
       <main className={classes.main}>
         <HeaderProject color={project?.color} />
         <section className={classes.container}>
-          <header className={classes.header}>
-            <h3 className={classes.name}>{project?.title}</h3>
-            {auth?.user?.uid === project?.creator_uid && (
-              <button
-                className={classes.members}
-                style={{ backgroundColor: `#${project?.color}` }}
-                onClick={handleOpenMembers}
-              >
-                Manage members
-              </button>
-            )}
-          </header>
+          <Header
+            project={project}
+            handleOpenMembers={handleOpenMembers}
+            projectId={id as string}
+          />
           <section className={classes.cards}>
             {cards?.map((card) => (
               <Card
