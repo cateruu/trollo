@@ -1,6 +1,7 @@
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { FormEvent, useState } from 'react';
 import { db } from '../../../config/firebase';
+import { useAppSelector } from '../../../utils/reduxHooks';
 import classes from './AddCard.module.scss';
 
 type Props = {
@@ -18,6 +19,7 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
     title: '',
     color: 'F07575',
   });
+  let { lastCardInOrder } = useAppSelector((state) => state.order);
 
   const handleDetailsChange = (value: string, object: string) => {
     setDetails((prevDetails) => ({ ...prevDetails, [object]: value }));
@@ -37,6 +39,7 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
         title: details.title,
         color: details.color,
         timestamp: Timestamp.now(),
+        order: ++lastCardInOrder,
       });
     } catch (error) {
       console.error(error);

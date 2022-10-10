@@ -3,8 +3,6 @@ import {
   CollectionReference,
   doc,
   DocumentReference,
-  DocumentSnapshot,
-  getDoc,
   onSnapshot,
   orderBy,
   query,
@@ -12,16 +10,17 @@ import {
 } from 'firebase/firestore';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
 import Card from '../../components/Card/Card';
 import HeaderProject from '../../components/Headers/HeaderProject/HeaderProject';
 import { db } from '../../config/firebase';
-import { useAuth } from '../../store/AuthContext';
 
 import classes from '../../styles/Project.module.scss';
 import Header from '../../components/Project/Header';
+import { useAppDispatch } from '../../utils/reduxHooks';
+import { setLastCardOrder } from '../../features/order/orderSlice';
 
 const ProjectPage = () => {
   const [project, setProject] = useState<Project | undefined | null>(null);
@@ -33,6 +32,7 @@ const ProjectPage = () => {
 
   const router = useRouter();
   const { id } = router.query;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     return onSnapshot(
@@ -49,7 +49,7 @@ const ProjectPage = () => {
         id as string,
         'cards'
       ) as CollectionReference<Card>,
-      orderBy('timestamp', 'asc')
+      orderBy('order', 'asc')
     );
 
     return onSnapshot(q, (cards) => setCards(cards.docs));
@@ -77,14 +77,18 @@ const ProjectPage = () => {
             projectId={id as string}
           />
           <section className={classes.cards}>
-            {cards?.map((card) => (
-              <Card
-                key={card.id}
-                cardId={card.id}
-                projectId={id as string}
-                data={card.data()}
-              />
-            ))}
+            {cards?.map((card) => {
+              dispatch(setLastCardOrder(card.data().order));
+
+              return (
+                <Card
+                  key={card.id}
+                  cardId={card.id}
+                  projectId={id as string}
+                  data={card.data()}
+                />
+              );
+            })}
             <button className={classes.add} onClick={handleAddCard}>
               Add card
             </button>

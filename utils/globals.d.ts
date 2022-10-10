@@ -13,6 +13,7 @@ interface Card {
   title: string;
   color: string;
   timestamp: Date;
+  order: number;
 }
 
 interface Task {
