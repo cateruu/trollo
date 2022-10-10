@@ -3,7 +3,7 @@ import classes from './Task.module.scss';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
+import { db } from '../../config/firebase';
 
 type Props = {
   data: Task;

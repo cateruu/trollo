@@ -14,8 +14,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
-import Card from '../../components/UI/Card/Card';
-import HeaderProject from '../../components/UI/Headers/HeaderProject/HeaderProject';
+import Card from '../../components/Card/Card';
+import HeaderProject from '../../components/Headers/HeaderProject/HeaderProject';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../store/AuthContext';
 

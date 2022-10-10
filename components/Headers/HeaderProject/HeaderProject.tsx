@@ -1,10 +1,9 @@
 import classes from './HeaderProject.module.scss';
 
 import { useRouter } from 'next/router';
-import { useAuth } from '../../../../store/AuthContext';
+import { useAuth } from '../../../store/AuthContext';
 import { AiFillAppstore } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
-import { IconContext } from 'react-icons';
 
 type Props = {
   color?: string;

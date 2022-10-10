@@ -10,8 +10,8 @@ import {
   where,
 } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
-import { db } from '../../../config/firebase';
-import AddTask from '../../Modals/AddTask/AddTask';
+import { db } from '../../config/firebase';
+import AddTask from '../Modals/AddTask/AddTask';
 import Task from '../Task/Task';
 import classes from './Card.module.scss';
 
