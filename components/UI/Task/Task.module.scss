@@ -10,6 +10,11 @@
   flex-direction: column;
   font-size: $font-normal;
   cursor: grab;
+  position: relative;
+
+  &:hover > .delete {
+    display: block;
+  }
 }
 
 .priority {
@@ -19,4 +24,18 @@
   font-size: $font-small;
   color: #fff;
   margin-bottom: 5px;
+}
+
+.delete {
+  display: none;
+  color: $border;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  transition: 0.1s;
+
+  &:hover {
+    color: $error;
+  }
 }
