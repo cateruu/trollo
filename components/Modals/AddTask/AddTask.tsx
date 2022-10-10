@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { FormEvent, useState } from 'react';
 import { db } from '../../../config/firebase';
 import classes from './AddTask.module.scss';
@@ -39,6 +39,7 @@ const AddTask = ({ handleAddTask, cardId, projectId }: Props) => {
         {
           task: task.task,
           priority: task.priority,
+          timestamp: Timestamp.now(),
         }
       );
     } catch (error) {

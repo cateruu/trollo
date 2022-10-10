@@ -3,8 +3,11 @@ import {
   CollectionReference,
   doc,
   onSnapshot,
+  orderBy,
+  query,
   QueryDocumentSnapshot,
   updateDoc,
+  where,
 } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { db } from '../../../config/firebase';
@@ -32,7 +35,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
   const [titleInput, setTitleInput] = useState(data.title);
 
   useEffect(() => {
-    return onSnapshot(
+    const q = query(
       collection(
         db,
         'projects',
@@ -41,8 +44,10 @@ const Card = ({ cardId, projectId, data }: Props) => {
         cardId,
         'tasks'
       ) as CollectionReference<Task>,
-      (tasks) => setTasks(tasks.docs)
+      orderBy('timestamp', 'desc')
     );
+
+    return onSnapshot(q, (tasks) => setTasks(tasks.docs));
   }, [projectId, cardId]);
 
   const handleAddTask = () => {
