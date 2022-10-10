@@ -77,7 +77,7 @@ const ProjectPage = () => {
       </Head>
       <main className={classes.main}>
         <HeaderProject color={project?.color} />
-        <article className={classes.container}>
+        <section className={classes.container}>
           <header className={classes.header}>
             <h3 className={classes.name}>{project?.title}</h3>
             {auth?.user?.uid === project?.creator_uid && (
@@ -103,7 +103,7 @@ const ProjectPage = () => {
               Add card
             </button>
           </section>
-        </article>
+        </section>
         {isManageMembersOpen && (
           <ManageMembers
             members={project?.shared_with}

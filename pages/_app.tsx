@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { AuthContextProvider } from '../store/AuthContext';
 import { useRouter } from 'next/router';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
+import { EditProjectProvider } from '../store/EditProjectContext';
 
 const authNotRequired = ['/login', '/signup'];
 
@@ -15,7 +16,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       ) : (
         <ProtectedRoute>
-          <Component {...pageProps} />
+          <EditProjectProvider>
+            <Component {...pageProps} />
+          </EditProjectProvider>
         </ProtectedRoute>
       )}
     </AuthContextProvider>

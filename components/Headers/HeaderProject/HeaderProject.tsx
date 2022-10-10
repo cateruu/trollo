@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../../store/AuthContext';
 import { AiFillAppstore } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
+import { AiOutlineClose } from 'react-icons/ai';
+import { useEditProject } from '../../../store/EditProjectContext';
 
 type Props = {
   color?: string;
@@ -12,6 +14,7 @@ type Props = {
 const HeaderProject = ({ color }: Props) => {
   const router = useRouter();
   const auth = useAuth();
+  const { editMode, handleEditModeChange } = useEditProject();
 
   return (
     <nav className={classes.header} style={{ backgroundColor: `#${color}` }}>
@@ -24,8 +27,12 @@ const HeaderProject = ({ color }: Props) => {
       </button>
       <h1 className={classes.name}>Trollo</h1>
       <div className={classes.container}>
-        <div className={classes.edit} style={{ backgroundColor: `#${color}` }}>
-          <FiEdit2 />
+        <div
+          className={classes.edit}
+          style={{ backgroundColor: `#${color}` }}
+          onClick={handleEditModeChange}
+        >
+          {editMode ? <AiOutlineClose /> : <FiEdit2 />}
         </div>
         <button
           className={classes.logout}
