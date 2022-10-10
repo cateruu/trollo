@@ -5,6 +5,8 @@ import {
   DocumentSnapshot,
   getDoc,
   onSnapshot,
+  orderBy,
+  query,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import Head from 'next/head';
@@ -47,15 +49,17 @@ const ProjectPage = () => {
   }, [id]);
 
   useEffect(() => {
-    return onSnapshot(
+    const q = query(
       collection(
         db,
         'projects',
         id as string,
         'cards'
       ) as CollectionReference<Card>,
-      (cards) => setCards(cards.docs)
+      orderBy('timestamp', 'asc')
     );
+
+    return onSnapshot(q, (cards) => setCards(cards.docs));
   }, [id]);
 
   const handleOpenMembers = () => {

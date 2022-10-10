@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import classes from './AddProjectModal.module.scss';
 
 import { RiArrowRightCircleFill } from 'react-icons/ri';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { useAuth } from '../../../store/AuthContext';
 
@@ -47,6 +47,7 @@ const AddProjectModal = ({ openAddProject }: Props) => {
         description: details.description,
         color: details.color,
         shared_with: members,
+        timestamp: Timestamp.now(),
       });
     } catch (error) {
       console.error(error);

@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { FormEvent, useState } from 'react';
 import { db } from '../../../config/firebase';
 import classes from './AddCard.module.scss';
@@ -36,6 +36,7 @@ const AddCard = ({ handleAddCard, projectId }: Props) => {
       await addDoc(collection(db, 'projects', projectId, 'cards'), {
         title: details.title,
         color: details.color,
+        timestamp: Timestamp.now(),
       });
     } catch (error) {
       console.error(error);
