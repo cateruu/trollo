@@ -21,6 +21,7 @@ import classes from '../../styles/Project.module.scss';
 import Header from '../../components/Project/Header';
 import { useAppDispatch } from '../../utils/reduxHooks';
 import { setLastCardOrder } from '../../features/order/orderSlice';
+import { reevaluateCardsOrder } from '../../utils/reevaluateCardsOrder';
 
 const ProjectPage = () => {
   const [project, setProject] = useState<Project | undefined | null>(null);
@@ -34,6 +35,7 @@ const ProjectPage = () => {
   const { id } = router.query;
   const dispatch = useAppDispatch();
 
+  // getting project
   useEffect(() => {
     return onSnapshot(
       doc(db, 'projects', id as string) as DocumentReference<Project>,
@@ -41,6 +43,7 @@ const ProjectPage = () => {
     );
   }, [id]);
 
+  // getting project cards
   useEffect(() => {
     const q = query(
       collection(
@@ -78,6 +81,7 @@ const ProjectPage = () => {
           />
           <section className={classes.cards}>
             {cards?.map((card) => {
+              reevaluateCardsOrder(id as string);
               dispatch(setLastCardOrder(card.data().order));
 
               return (

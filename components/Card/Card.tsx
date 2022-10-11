@@ -34,11 +34,12 @@ const Card = ({ cardId, projectId, data }: Props) => {
   const [tasks, setTasks] = useState<QueryDocumentSnapshot<Task>[] | null>(
     null
   );
-  const [editModeOpen, setEditModeOpen] = useState(false);
+  const [changeTitleModeOpen, setChangeTitleModeOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(data.title);
 
   const { editMode } = useEditProject();
 
+  // getting card tasks
   useEffect(() => {
     const q = query(
       collection(
@@ -59,9 +60,9 @@ const Card = ({ cardId, projectId, data }: Props) => {
     setIsAddTaskOpen(!isAddTaskOpen);
   };
 
-  const handleOpenEditMode = () => {
+  const handleChangeTitleModeOpen = () => {
     setTitleInput(data.title);
-    setEditModeOpen(!editModeOpen);
+    setChangeTitleModeOpen(!changeTitleModeOpen);
   };
 
   const handleTitleInput = (input: string) => {
@@ -79,28 +80,28 @@ const Card = ({ cardId, projectId, data }: Props) => {
       console.error(error);
     }
 
-    handleOpenEditMode();
+    handleChangeTitleModeOpen();
   };
 
-  const increaseCardOrder = async () => {
+  const changeCardOrder = async (action: string) => {
     let tempOrder = data.order;
-    const cardBeforeQuery = query(
+    const cardQuery = query(
       collection(db, 'projects', projectId, 'cards'),
-      where('order', '==', --tempOrder)
+      where('order', '==', action === 'increase' ? --tempOrder : ++tempOrder)
     );
 
-    let cardBeforeRef;
+    let cardRef;
     try {
-      const querySnapshot = await getDocs(cardBeforeQuery);
-      querySnapshot.forEach((doc) => (cardBeforeRef = doc.ref));
+      const querySnapshot = await getDocs(cardQuery);
+      querySnapshot.forEach((doc) => (cardRef = doc.ref));
     } catch (error) {
       console.log(error);
     }
 
-    if (cardBeforeRef) {
+    if (cardRef) {
       // change order of card before
       try {
-        await updateDoc(cardBeforeRef, {
+        await updateDoc(cardRef, {
           order: data.order,
         });
       } catch (error) {
@@ -113,46 +114,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
 
         let tempOrder = data.order;
         await updateDoc(currentCardRef, {
-          order: --tempOrder,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const lowerCardOrder = async () => {
-    let tempOrder = data.order;
-    const cardAfterQuery = query(
-      collection(db, 'projects', projectId, 'cards'),
-      where('order', '==', ++tempOrder)
-    );
-
-    let cardAfterRef;
-    try {
-      const querySnapshot = await getDocs(cardAfterQuery);
-      querySnapshot.forEach((doc) => (cardAfterRef = doc.ref));
-    } catch (error) {
-      console.log(error);
-    }
-
-    if (cardAfterRef) {
-      // change order of card after
-      try {
-        await updateDoc(cardAfterRef, {
-          order: data.order,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-
-      // change order of current card
-      try {
-        const currentCardRef = doc(db, 'projects', projectId, 'cards', cardId);
-
-        let tempOrder = data.order;
-        await updateDoc(currentCardRef, {
-          order: ++tempOrder,
+          order: action === 'increase' ? --tempOrder : ++tempOrder,
         });
       } catch (error) {
         console.log(error);
@@ -164,25 +126,25 @@ const Card = ({ cardId, projectId, data }: Props) => {
     <section>
       {editMode && (
         <div className={classes.editOrder}>
-          <BsArrowLeft onClick={increaseCardOrder} />
-          <BsArrowRight onClick={lowerCardOrder} />
+          <BsArrowLeft onClick={() => changeCardOrder('increase')} />
+          <BsArrowRight onClick={() => changeCardOrder('lower')} />
         </div>
       )}
       <section
         className={classes.card}
         style={{ borderTop: `5px solid #${data.color}` }}
       >
-        {editModeOpen ? (
+        {changeTitleModeOpen ? (
           <IconContext.Provider value={{ className: classes.close }}>
-            <AiFillCloseCircle onClick={handleOpenEditMode} />
+            <AiFillCloseCircle onClick={handleChangeTitleModeOpen} />
           </IconContext.Provider>
         ) : (
           <IconContext.Provider value={{ className: classes.edit }}>
-            <FiEdit2 onClick={handleOpenEditMode} />
+            <FiEdit2 onClick={handleChangeTitleModeOpen} />
           </IconContext.Provider>
         )}
         <header className={classes.header}>
-          {editModeOpen ? (
+          {changeTitleModeOpen ? (
             <div className={classes.titleInput}>
               <input
                 type='email'
