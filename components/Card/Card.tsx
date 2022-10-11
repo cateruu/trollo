@@ -2,6 +2,7 @@ import {
   collection,
   CollectionReference,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -81,12 +82,90 @@ const Card = ({ cardId, projectId, data }: Props) => {
     handleOpenEditMode();
   };
 
+  const increaseCardOrder = async () => {
+    let tempOrder = data.order;
+    const cardBeforeQuery = query(
+      collection(db, 'projects', projectId, 'cards'),
+      where('order', '==', --tempOrder)
+    );
+
+    let cardBeforeRef;
+    try {
+      const querySnapshot = await getDocs(cardBeforeQuery);
+      querySnapshot.forEach((doc) => (cardBeforeRef = doc.ref));
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (cardBeforeRef) {
+      // change order of card before
+      try {
+        await updateDoc(cardBeforeRef, {
+          order: data.order,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      // change order of current card
+      try {
+        const currentCardRef = doc(db, 'projects', projectId, 'cards', cardId);
+
+        let tempOrder = data.order;
+        await updateDoc(currentCardRef, {
+          order: --tempOrder,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const lowerCardOrder = async () => {
+    let tempOrder = data.order;
+    const cardAfterQuery = query(
+      collection(db, 'projects', projectId, 'cards'),
+      where('order', '==', ++tempOrder)
+    );
+
+    let cardAfterRef;
+    try {
+      const querySnapshot = await getDocs(cardAfterQuery);
+      querySnapshot.forEach((doc) => (cardAfterRef = doc.ref));
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (cardAfterRef) {
+      // change order of card after
+      try {
+        await updateDoc(cardAfterRef, {
+          order: data.order,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      // change order of current card
+      try {
+        const currentCardRef = doc(db, 'projects', projectId, 'cards', cardId);
+
+        let tempOrder = data.order;
+        await updateDoc(currentCardRef, {
+          order: ++tempOrder,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <section>
       {editMode && (
         <div className={classes.editOrder}>
-          <BsArrowLeft />
-          <BsArrowRight />
+          <BsArrowLeft onClick={increaseCardOrder} />
+          <BsArrowRight onClick={lowerCardOrder} />
         </div>
       )}
       <section
