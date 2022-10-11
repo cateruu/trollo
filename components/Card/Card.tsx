@@ -23,6 +23,7 @@ import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IconContext } from 'react-icons';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
 import { useEditProject } from '../../store/EditProjectContext';
+import { reevaluateCardsOrder } from '../../utils/reevaluateCardsOrder';
 
 type Props = {
   cardId: string;
@@ -126,6 +127,7 @@ const Card = ({ cardId, projectId, data }: Props) => {
   const deleteCard = async () => {
     try {
       await deleteDoc(doc(db, 'projects', projectId, 'cards', cardId));
+      reevaluateCardsOrder(projectId);
     } catch (error) {
       console.error(error);
     }

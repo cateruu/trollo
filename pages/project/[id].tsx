@@ -55,6 +55,8 @@ const ProjectPage = () => {
       orderBy('order', 'asc')
     );
 
+    reevaluateCardsOrder(id as string);
+
     return onSnapshot(q, (cards) => setCards(cards.docs));
   }, [id]);
 
@@ -81,7 +83,6 @@ const ProjectPage = () => {
           />
           <section className={classes.cards}>
             {cards?.map((card) => {
-              reevaluateCardsOrder(id as string);
               dispatch(setLastCardOrder(card.data().order));
 
               return (
