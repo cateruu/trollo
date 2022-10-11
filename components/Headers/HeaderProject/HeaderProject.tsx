@@ -9,9 +9,10 @@ import { useEditProject } from '../../../store/EditProjectContext';
 
 type Props = {
   color?: string;
+  project: Project | undefined | null;
 };
 
-const HeaderProject = ({ color }: Props) => {
+const HeaderProject = ({ color, project }: Props) => {
   const router = useRouter();
   const auth = useAuth();
   const { editMode, handleEditModeChange } = useEditProject();
@@ -30,13 +31,15 @@ const HeaderProject = ({ color }: Props) => {
       </button>
       <h1 className={classes.name}>Trollo</h1>
       <div className={classes.container}>
-        <div
-          className={classes.edit}
-          style={{ backgroundColor: `#${color}` }}
-          onClick={handleEditModeChange}
-        >
-          {editMode ? <AiOutlineClose /> : <FiEdit2 />}
-        </div>
+        {auth?.user?.uid === project?.creator_uid && (
+          <div
+            className={classes.edit}
+            style={{ backgroundColor: `#${color}` }}
+            onClick={handleEditModeChange}
+          >
+            {editMode ? <AiOutlineClose /> : <FiEdit2 />}
+          </div>
+        )}
         <button
           className={classes.logout}
           style={{ backgroundColor: `#${color}` }}

@@ -74,7 +74,7 @@ const ProjectPage = () => {
         <title>Trollo - {project?.title}</title>
       </Head>
       <main className={classes.main}>
-        <HeaderProject color={project?.color} />
+        <HeaderProject color={project?.color} project={project} />
         <section className={classes.container}>
           <Header
             project={project}
