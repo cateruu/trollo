@@ -1,6 +1,7 @@
 import {
   collection,
   CollectionReference,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -17,7 +18,7 @@ import Task from '../Task/Task';
 import classes from './Card.module.scss';
 
 import { FiEdit2 } from 'react-icons/fi';
-import { AiFillCloseCircle } from 'react-icons/ai';
+import { AiFillCloseCircle, AiOutlineDelete } from 'react-icons/ai';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IconContext } from 'react-icons';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
@@ -122,11 +123,20 @@ const Card = ({ cardId, projectId, data }: Props) => {
     }
   };
 
+  const deleteCard = async () => {
+    try {
+      await deleteDoc(doc(db, 'projects', projectId, 'cards', cardId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section>
       {editMode && (
         <div className={classes.editOrder}>
           <BsArrowLeft onClick={() => changeCardOrder('increase')} />
+          <AiOutlineDelete onClick={deleteCard} />
           <BsArrowRight onClick={() => changeCardOrder('lower')} />
         </div>
       )}

@@ -124,4 +124,8 @@
   & > svg:hover {
     color: $main-text;
   }
+
+  & > svg:nth-of-type(2):hover {
+    color: $error;
+  }
 }
