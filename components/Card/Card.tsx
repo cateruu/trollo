@@ -11,7 +11,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, DragEvent } from 'react';
 import { db } from '../../config/firebase';
 import AddTask from '../Modals/AddTask/AddTask';
 import Task from '../Task/Task';
@@ -24,14 +24,27 @@ import { IconContext } from 'react-icons';
 import { RiArrowRightCircleFill } from 'react-icons/ri';
 import { useEditProject } from '../../store/EditProjectContext';
 import { reevaluateCardsOrder } from '../../utils/reevaluateCardsOrder';
+import { DragTaskType } from '../../pages/project/[id]';
 
 type Props = {
   cardId: string;
   projectId: string;
   data: Card;
+  dragging: boolean;
+  handleDragStart: (e: DragEvent, params: DragTaskType) => void;
+  handleDragEnter: (e: DragEvent, params: DragTaskType) => void;
+  getDragItemStyle: (params: DragTaskType) => string | undefined;
 };
 
-const Card = ({ cardId, projectId, data }: Props) => {
+const Card = ({
+  cardId,
+  projectId,
+  data,
+  dragging,
+  handleDragStart,
+  handleDragEnter,
+  getDragItemStyle,
+}: Props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [tasks, setTasks] = useState<QueryDocumentSnapshot<Task>[] | null>(
     null
@@ -179,6 +192,10 @@ const Card = ({ cardId, projectId, data }: Props) => {
             projectId={projectId}
             cardId={cardId}
             taskId={task.id}
+            dragging={dragging}
+            handleDragStart={handleDragStart}
+            handleDragEnter={handleDragEnter}
+            getDragItemStyle={getDragItemStyle}
           />
         ))}
         <button className={classes.add} onClick={handleAddTask}>

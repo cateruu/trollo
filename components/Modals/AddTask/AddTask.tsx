@@ -37,8 +37,10 @@ const AddTask = ({ handleAddTask, cardId, projectId }: Props) => {
       await addDoc(
         collection(db, 'projects', projectId, 'cards', cardId, 'tasks'),
         {
+          card: cardId,
           task: task.task,
           priority: task.priority,
+          order: 1,
           timestamp: Timestamp.now(),
         }
       );

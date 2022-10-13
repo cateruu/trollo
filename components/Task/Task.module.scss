@@ -39,3 +39,13 @@
     color: $error;
   }
 }
+
+.dragging {
+  background-color: $border;
+  color: $border;
+
+  & > .priority {
+    background-color: $border !important;
+    color: $border;
+  }
+}

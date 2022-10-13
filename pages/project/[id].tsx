@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { DragEvent, useEffect, useRef, useState } from 'react';
 import AddCard from '../../components/Modals/AddCard/AddCard';
 import ManageMembers from '../../components/Modals/ManageMembers/ManageMembers';
 import Card from '../../components/Card/Card';
@@ -23,6 +23,11 @@ import { useAppDispatch } from '../../utils/reduxHooks';
 import { setLastCardOrder } from '../../features/order/orderSlice';
 import { reevaluateCardsOrder } from '../../utils/reevaluateCardsOrder';
 
+export type DragTaskType = {
+  card: string;
+  task: string;
+};
+
 const ProjectPage = () => {
   const [project, setProject] = useState<Project | undefined | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
@@ -30,6 +35,10 @@ const ProjectPage = () => {
   const [cards, setCards] = useState<QueryDocumentSnapshot<Card>[] | null>(
     null
   );
+  const [dragging, setDragging] = useState(false);
+
+  const dragTask = useRef<DragTaskType | null>(null);
+  const dragNode = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
   const { id } = router.query;
@@ -68,6 +77,33 @@ const ProjectPage = () => {
     setIsAddCardOpen(!isAddCardOpen);
   };
 
+  const handleDragStart = (e: DragEvent, params: DragTaskType) => {
+    console.log(params);
+    dragTask.current = params;
+    dragNode.current = e.target as HTMLDivElement;
+    dragNode.current?.addEventListener('dragend', handleDragEnd);
+    setTimeout(() => setDragging(true), 0);
+  };
+
+  const handleDragEnter = (e: DragEvent, params: DragTaskType) => {
+    console.log('enter', params);
+  };
+
+  const handleDragEnd = () => {
+    dragNode.current?.removeEventListener('dragend', handleDragEnd);
+    dragNode.current = null;
+    setDragging(false);
+  };
+
+  const getDragItemStyle = (params: DragTaskType) => {
+    if (
+      params.card === dragTask.current?.card &&
+      params.task === dragTask.current.task
+    ) {
+      return 'draggable';
+    }
+  };
+
   return (
     <>
       <Head>
@@ -91,6 +127,10 @@ const ProjectPage = () => {
                   cardId={card.id}
                   projectId={id as string}
                   data={card.data()}
+                  dragging={dragging}
+                  handleDragStart={handleDragStart}
+                  handleDragEnter={handleDragEnter}
+                  getDragItemStyle={getDragItemStyle}
                 />
               );
             })}
