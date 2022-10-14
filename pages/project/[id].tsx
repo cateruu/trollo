@@ -133,6 +133,7 @@ const ProjectPage = () => {
                   cardId={card.id}
                   projectId={id as string}
                   data={card.data}
+                  cards={cards}
                   setCards={setCards}
                   dragging={dragging}
                   handleDragStart={handleDragStart}

@@ -36,6 +36,7 @@ type Props = {
   cardId: string;
   projectId: string;
   data: CardData;
+  cards: Card[] | null;
   setCards: Dispatch<SetStateAction<Card[] | null>>;
   dragging: boolean;
   handleDragStart: (e: DragEvent, params: DragTaskType) => void;
@@ -47,6 +48,7 @@ const Card = ({
   cardId,
   projectId,
   data,
+  cards,
   setCards,
   dragging,
   handleDragStart,
@@ -54,9 +56,7 @@ const Card = ({
   getDragItemStyle,
 }: Props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-  const [tasks, setTasks] = useState<QueryDocumentSnapshot<TaskData>[] | null>(
-    null
-  );
+  const [tasks, setTasks] = useState<Task[] | null>(null);
   const [changeTitleModeOpen, setChangeTitleModeOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(data.title);
 
@@ -84,13 +84,13 @@ const Card = ({
       setCards((prevCards) => {
         return prevCards?.map((card) => {
           if (card.id === temp[0].data.card) {
-            console.log({ ...card, tasks: temp });
             return { ...card, tasks: temp };
           } else {
             return { ...card };
           }
         });
       });
+      setTasks(temp);
     });
   }, [projectId, cardId, setCards]);
 
@@ -211,7 +211,7 @@ const Card = ({
         {tasks?.map((task) => (
           <Task
             key={task.id}
-            data={task.data()}
+            data={task.data}
             projectId={projectId}
             cardId={cardId}
             taskId={task.id}
