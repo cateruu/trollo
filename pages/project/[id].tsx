@@ -32,9 +32,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState<Project | undefined | null>(null);
   const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
-  const [cards, setCards] = useState<QueryDocumentSnapshot<Card>[] | null>(
-    null
-  );
+  const [cards, setCards] = useState<Card[] | null>(null);
   const [dragging, setDragging] = useState(false);
 
   const dragTask = useRef<DragTaskType | null>(null);
@@ -60,14 +58,22 @@ const ProjectPage = () => {
         'projects',
         id as string,
         'cards'
-      ) as CollectionReference<Card>,
+      ) as CollectionReference<CardData>,
       orderBy('order', 'asc')
     );
 
     reevaluateCardsOrder(id as string);
 
-    return onSnapshot(q, (cards) => setCards(cards.docs));
+    return onSnapshot(q, (cards) => {
+      let temp: Card[] = [];
+      cards.forEach((card) =>
+        temp.push({ id: card.id, data: card.data(), tasks: [] })
+      );
+      setCards(temp);
+    });
   }, [id]);
+
+  console.log(cards);
 
   const handleOpenMembers = () => {
     setIsManageMembersOpen(!isManageMembersOpen);
@@ -78,7 +84,6 @@ const ProjectPage = () => {
   };
 
   const handleDragStart = (e: DragEvent, params: DragTaskType) => {
-    console.log(params);
     dragTask.current = params;
     dragNode.current = e.target as HTMLDivElement;
     dragNode.current?.addEventListener('dragend', handleDragEnd);
@@ -86,6 +91,7 @@ const ProjectPage = () => {
   };
 
   const handleDragEnter = (e: DragEvent, params: DragTaskType) => {
+    if (dragNode.current === e.target) return;
     console.log('enter', params);
   };
 
@@ -119,14 +125,15 @@ const ProjectPage = () => {
           />
           <section className={classes.cards}>
             {cards?.map((card) => {
-              dispatch(setLastCardOrder(card.data().order));
+              dispatch(setLastCardOrder(card.data.order));
 
               return (
                 <Card
                   key={card.id}
                   cardId={card.id}
                   projectId={id as string}
-                  data={card.data()}
+                  data={card.data}
+                  setCards={setCards}
                   dragging={dragging}
                   handleDragStart={handleDragStart}
                   handleDragEnter={handleDragEnter}

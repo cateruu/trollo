@@ -11,7 +11,13 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { useState, useEffect, DragEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  DragEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { db } from '../../config/firebase';
 import AddTask from '../Modals/AddTask/AddTask';
 import Task from '../Task/Task';
@@ -29,7 +35,8 @@ import { DragTaskType } from '../../pages/project/[id]';
 type Props = {
   cardId: string;
   projectId: string;
-  data: Card;
+  data: CardData;
+  setCards: Dispatch<SetStateAction<Card[] | null>>;
   dragging: boolean;
   handleDragStart: (e: DragEvent, params: DragTaskType) => void;
   handleDragEnter: (e: DragEvent, params: DragTaskType) => void;
@@ -40,13 +47,14 @@ const Card = ({
   cardId,
   projectId,
   data,
+  setCards,
   dragging,
   handleDragStart,
   handleDragEnter,
   getDragItemStyle,
 }: Props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-  const [tasks, setTasks] = useState<QueryDocumentSnapshot<Task>[] | null>(
+  const [tasks, setTasks] = useState<QueryDocumentSnapshot<TaskData>[] | null>(
     null
   );
   const [changeTitleModeOpen, setChangeTitleModeOpen] = useState(false);
@@ -64,12 +72,27 @@ const Card = ({
         'cards',
         cardId,
         'tasks'
-      ) as CollectionReference<Task>,
+      ) as CollectionReference<TaskData>,
       orderBy('timestamp', 'desc')
     );
 
-    return onSnapshot(q, (tasks) => setTasks(tasks.docs));
-  }, [projectId, cardId]);
+    return onSnapshot(q, (tasks) => {
+      let temp: Task[] = [];
+      tasks.forEach((task) => {
+        temp.push({ id: task.id, data: task.data() });
+      });
+      setCards((prevCards) => {
+        return prevCards?.map((card) => {
+          if (card.id === temp[0].data.card) {
+            console.log({ ...card, tasks: temp });
+            return { ...card, tasks: temp };
+          } else {
+            return { ...card };
+          }
+        });
+      });
+    });
+  }, [projectId, cardId, setCards]);
 
   const handleAddTask = () => {
     setIsAddTaskOpen(!isAddTaskOpen);

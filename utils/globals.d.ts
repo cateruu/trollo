@@ -10,6 +10,12 @@ interface Project {
 }
 
 interface Card {
+  id: string;
+  data: CardData;
+  tasks: Task[];
+}
+
+interface CardData {
   title: string;
   color: string;
   timestamp: Date;
@@ -17,6 +23,12 @@ interface Card {
 }
 
 interface Task {
+  id: string;
+  data: TaskData;
+}
+
+interface TaskData {
+  card: string;
   task: string;
   priority: string;
   timestamp: Date;

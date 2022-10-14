@@ -40,7 +40,6 @@ const AddTask = ({ handleAddTask, cardId, projectId }: Props) => {
           card: cardId,
           task: task.task,
           priority: task.priority,
-          order: 1,
           timestamp: Timestamp.now(),
         }
       );

@@ -9,7 +9,7 @@ import { db } from '../../config/firebase';
 import { DragTaskType } from '../../pages/project/[id]';
 
 type Props = {
-  data: Task;
+  data: TaskData;
   projectId: string;
   cardId: string;
   taskId: string;
