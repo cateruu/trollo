@@ -7,7 +7,6 @@ import {
   onSnapshot,
   orderBy,
   query,
-  QueryDocumentSnapshot,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -37,6 +36,7 @@ type Props = {
   projectId: string;
   data: CardData;
   cards: Card[] | null;
+  tasks: Task[] | null;
   setCards: Dispatch<SetStateAction<Card[] | null>>;
   dragging: boolean;
   handleDragStart: (e: DragEvent, params: DragTaskType) => void;
@@ -48,17 +48,16 @@ const Card = ({
   cardId,
   projectId,
   data,
-  cards,
   setCards,
+  tasks,
   dragging,
   handleDragStart,
   handleDragEnter,
   getDragItemStyle,
 }: Props) => {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-  const [tasks, setTasks] = useState<Task[] | null>(null);
   const [changeTitleModeOpen, setChangeTitleModeOpen] = useState(false);
-  const [titleInput, setTitleInput] = useState(data.title);
+  const [titleInput, setTitleInput] = useState(data?.title);
 
   const { editMode } = useEditProject();
 
@@ -82,15 +81,14 @@ const Card = ({
         temp.push({ id: task.id, data: task.data() });
       });
       setCards((prevCards) => {
-        return prevCards?.map((card) => {
-          if (card.id === temp[0].data.card) {
+        return prevCards!.map((card) => {
+          if (card.id === temp[0]?.data.card) {
             return { ...card, tasks: temp };
           } else {
             return { ...card };
           }
         });
       });
-      setTasks(temp);
     });
   }, [projectId, cardId, setCards]);
 

@@ -73,8 +73,6 @@ const ProjectPage = () => {
     });
   }, [id]);
 
-  console.log(cards);
-
   const handleOpenMembers = () => {
     setIsManageMembersOpen(!isManageMembersOpen);
   };
@@ -92,7 +90,39 @@ const ProjectPage = () => {
 
   const handleDragEnter = (e: DragEvent, params: DragTaskType) => {
     if (dragNode.current === e.target) return;
-    console.log('enter', params);
+
+    const currentTask = dragTask.current;
+    const currentTaskCardIndex = cards!.indexOf(
+      cards!.find((card) => card.id === currentTask!.card) as Card
+    );
+    const currentTaskIndex = cards![currentTaskCardIndex].tasks.indexOf(
+      cards![currentTaskCardIndex].tasks.find(
+        (task) => task.id === currentTask!.task
+      ) as Task
+    );
+
+    const cardIndex = cards!.indexOf(
+      cards!.find((card) => card.id === params.card) as Card
+    );
+    const taskIndex = cards![cardIndex].tasks.indexOf(
+      cards![cardIndex].tasks.find((task) => task.id === params.task) as Task
+    );
+
+    console.log(currentTaskCardIndex, currentTaskIndex);
+
+    setCards((prevCards) => {
+      let newCards = JSON.parse(JSON.stringify(prevCards));
+      if (prevCards) {
+        newCards[cardIndex].tasks.splice(
+          taskIndex,
+          0,
+          newCards[currentTaskCardIndex].tasks.splice(currentTaskIndex, 1)[0]
+        );
+        dragTask.current = params;
+      }
+
+      return newCards;
+    });
   };
 
   const handleDragEnd = () => {
@@ -134,6 +164,7 @@ const ProjectPage = () => {
                   projectId={id as string}
                   data={card.data}
                   cards={cards}
+                  tasks={card.tasks}
                   setCards={setCards}
                   dragging={dragging}
                   handleDragStart={handleDragStart}
