@@ -179,6 +179,11 @@ const Card = ({
       <section
         className={classes.card}
         style={{ borderTop: `5px solid #${data.color}` }}
+        onDragEnter={
+          dragging && !tasks?.length
+            ? (e) => handleDragEnter(e, { card: cardId, task: 0 })
+            : undefined
+        }
       >
         {changeTitleModeOpen ? (
           <IconContext.Provider value={{ className: classes.close }}>

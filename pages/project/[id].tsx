@@ -25,7 +25,7 @@ import { reevaluateCardsOrder } from '../../utils/reevaluateCardsOrder';
 
 export type DragTaskType = {
   card: string;
-  task: string;
+  task: string | number;
 };
 
 const ProjectPage = () => {
@@ -104,9 +104,14 @@ const ProjectPage = () => {
     const cardIndex = cards!.indexOf(
       cards!.find((card) => card.id === params.card) as Card
     );
-    const taskIndex = cards![cardIndex].tasks.indexOf(
-      cards![cardIndex].tasks.find((task) => task.id === params.task) as Task
-    );
+    const taskIndex =
+      params.task === 0
+        ? 0
+        : cards![cardIndex].tasks.indexOf(
+            cards![cardIndex].tasks.find(
+              (task) => task.id === params.task
+            ) as Task
+          );
 
     console.log(currentTaskCardIndex, currentTaskIndex);
 
